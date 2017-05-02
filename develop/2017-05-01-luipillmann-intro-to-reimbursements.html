@@ -16052,16 +16052,69 @@ dtype: int64</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[19]:</div>
+<div class="prompt input_prompt">In&nbsp;[32]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Imports CEAP maximum values </span>
 <span class="c1">#ceap_states = pd.read_csv(&#39;../data/ceap_states.csv&#39;)</span>
 <span class="n">ceap_states</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;ceap_states.csv&#39;</span><span class="p">)</span>  <span class="c1"># Temporary file path (later, move to data/)</span>
 <span class="n">ceap_states</span> <span class="o">=</span> <span class="n">ceap_states</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;state&#39;</span><span class="p">)</span>
+<span class="n">ceap_states</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 
 </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+<div class="prompt output_prompt">Out[32]:</div>
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>max_ceap</th>
+    </tr>
+    <tr>
+      <th>state</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>AC</th>
+      <td>44632.46</td>
+    </tr>
+    <tr>
+      <th>AL</th>
+      <td>40944.10</td>
+    </tr>
+    <tr>
+      <th>AM</th>
+      <td>43570.12</td>
+    </tr>
+    <tr>
+      <th>AP</th>
+      <td>43374.78</td>
+    </tr>
+    <tr>
+      <th>BA</th>
+      <td>39010.85</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
 </div>
 </div>
 

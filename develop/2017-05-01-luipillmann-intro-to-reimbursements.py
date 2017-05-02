@@ -222,12 +222,13 @@ s
 # ##### (!) Important: CEAP maximum value differs among states
 # This section considers these differences, according to: http://www2.camara.leg.br/comunicacao/assessoria-de-imprensa/cota-parlamentar
 
-# In[19]:
+# In[32]:
 
 # Imports CEAP maximum values 
 #ceap_states = pd.read_csv('../data/ceap_states.csv')
 ceap_states = pd.read_csv('ceap_states.csv')  # Temporary file path (later, move to data/)
 ceap_states = ceap_states.set_index('state')
+ceap_states.head()
 
 
 # In[20]:

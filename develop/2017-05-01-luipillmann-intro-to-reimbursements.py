@@ -220,38 +220,49 @@ s
 # #### How much did congressmen from each party spend in the year, in average? 
 
 # ##### (!) Important: CEAP maximum value differs among states
-# WIP: This analysis has yet to consider these differences. Please check: http://www2.camara.leg.br/comunicacao/assessoria-de-imprensa/cota-parlamentar
+# This section considers these differences, according to: http://www2.camara.leg.br/comunicacao/assessoria-de-imprensa/cota-parlamentar
 
 # In[19]:
+
+# Imports CEAP maximum values 
+#ceap_states = pd.read_csv('../data/ceap_states.csv')
+ceap_states = pd.read_csv('ceap_states.csv')  # Temporary file path (later, move to data/)
+ceap_states = ceap_states.set_index('state')
+
+
+# In[20]:
 
 t = r.groupby('state').sum()
 t = t.drop(['year', 'month'], 1)  # Removes useless columns
 
 t['congressmen_per_state'] = s
+t['monthly_max_ceap'] = ceap_states
 years = len(r.year.unique())
-
-
-# In[20]:
-
-t['monthly_value_per_congressperson'] = t['total_net_value'] / t['congressmen_per_state'] / (12*years)
-t.sort_values(by='monthly_value_per_congressperson', ascending=False).head()
 
 
 # In[21]:
 
-t.monthly_value_per_congressperson    .sort_values(ascending=False)    .plot(kind='bar')
+t['monthly_value_per_congressperson'] = t['total_net_value'] / t['congressmen_per_state'] / (12*years)
+t['ceap_usage'] = (t['monthly_value_per_congressperson'] / t['monthly_max_ceap']) * 100
 
-plt.title('Average monthly reimbursements per congressperson by state (R$)')
+t.sort_values(by='ceap_usage', ascending=False).head()
+
+
+# In[22]:
+
+t.ceap_usage    .sort_values(ascending=False)    .plot(kind='bar')
+
+plt.title('Average monthly CEAP usage per congressperson by state (% of max. quota)')
 
 
 # ### Who were the top spenders of all time in absolute terms?
 
-# In[22]:
+# In[23]:
 
 r.groupby('congressperson_name')    .sum()    .total_net_value    .sort_values(ascending=False)    .head(10)
 
 
-# In[23]:
+# In[24]:
 
 r.groupby('congressperson_name')    .sum()    .total_net_value    .sort_values(ascending=False)    .head(30)    .plot(kind='bar')
 
@@ -261,7 +272,7 @@ plt.title('Total reimbursements issued per congressperson (all years)')
 # ### Who were the most hired suppliers by amount paid?
 # This analysis identifies suppliers by their unique CNPJ. It is worth noting that, commonly, some telecom carriers use different CNPJ for its subsidiaries in different states (e.g. TIM SP, TIM Sul, etc).
 
-# In[24]:
+# In[25]:
 
 sp = r.groupby(['cnpj_cpf', 'supplier', 'subquota_description'])        .sum()        .drop(['year', 'month'], 1)        .sort_values(by='total_net_value', ascending=False)
 
@@ -271,14 +282,14 @@ sp = sp.set_index('cnpj_cpf')
 sp.head()
 
 
-# In[25]:
+# In[26]:
 
 cnpj = r.groupby('cnpj_cpf')        .sum()        .drop(['year', 'month'], 1)        .sort_values(by='total_net_value', ascending=False)
 
 cnpj.head()
 
 
-# In[26]:
+# In[27]:
 
 # Adds supplier name besides total_net_value in cnpj df
 
@@ -286,7 +297,7 @@ cnpj['supplier'] = ''  # Creates empty column
 cnpj = cnpj.head(1000)  # Gets only first 1000 for this analysis
 
 
-# In[27]:
+# In[28]:
 
 # Looks up for supplier names in sp df and fills cnpj df (it takes a while to compute...)
 
@@ -299,7 +310,7 @@ for i in range(len(cnpj)):
 cnpj.head(10)
 
 
-# In[28]:
+# In[29]:
 
 # Fixes better indexing to plot in a copy
 sp2 = cnpj.set_index('supplier')
@@ -311,14 +322,14 @@ plt.title('Most hired suppliers (unique CNPJ) by total amount paid (R$)')
 
 # #### Which congressmen hired the top supplier and how much did they pay?
 
-# In[29]:
+# In[30]:
 
 r.groupby(['cnpj_cpf', 'congressperson_name'])    .sum()    .sort_values(by='total_net_value', ascending=False)    .loc['02558157000162']    .total_net_value    .head(20)
 
 
 # ### Which are the most expensive individual reimbursements?
 
-# In[30]:
+# In[31]:
 
 r = r.sort_values(by='total_net_value', ascending=False)
 r.head(20)

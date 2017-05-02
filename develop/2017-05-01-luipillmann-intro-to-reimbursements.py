@@ -162,7 +162,7 @@ parties
 
 # In[13]:
 
-# Computes unique names in each party and saves into a pd.Series
+# Computes unique names in each state and saves into a pd.Series
 d = dict()
 for p in parties:
     d[p] = len(r[r.party == p].congressperson_name.unique())

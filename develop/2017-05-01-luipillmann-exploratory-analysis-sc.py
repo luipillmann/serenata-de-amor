@@ -63,7 +63,7 @@ r.head()
 # ## Filters depending on the scope of analysis
 # Here, filters by state, party, years, etc. can be applied.
 
-# In[54]:
+# In[76]:
 
 # Filters only by congresmen in Santa Catarina
 r = r[r.state == 'SC']

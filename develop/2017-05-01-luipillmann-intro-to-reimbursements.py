@@ -58,6 +58,17 @@ r = reimbursements[['year', 'month', 'total_net_value', 'party', 'state', 'term'
 r.head()
 
 
+# ## Filters depending on the scope of analysis
+# Here, filters by state, party, years, etc. can be applied.
+
+# In[4]:
+
+# Filters only most recent years (from 2015)
+r = r[(r.year == 2015) | (r.year == 2016) | (r.year == 2017)]
+
+r.head()
+
+
 # ## Questions & answers
 
 # ### Evolution of average monthly spending along the years
@@ -65,7 +76,7 @@ r.head()
 
 # #### How many congressmen in each year?
 
-# In[4]:
+# In[5]:
 
 years = r.year.unique()
 
@@ -78,7 +89,7 @@ s = pd.Series(d)
 s
 
 
-# In[5]:
+# In[6]:
 
 s.plot(kind='bar')
 plt.title('Qtdy of congressmen listed per year')
@@ -86,7 +97,7 @@ plt.title('Qtdy of congressmen listed per year')
 
 # #### How much did they spend, in average, per month in each year?
 
-# In[6]:
+# In[7]:
 
 # Groups by name summing up spendings
 a = r.groupby(['year']).sum().drop('month', 1)
@@ -95,7 +106,7 @@ a['monthly_value_per_congressmen'] = a['total_net_value'] / a['congressmen_qty']
 a = a.drop(2017, 0)  # Neglets 2017
 
 
-# In[7]:
+# In[8]:
 
 a.monthly_value_per_congressmen.plot(kind='bar')
 plt.title('Fluctuation of average monthly CEAP spending along the years (R$)')
@@ -104,7 +115,7 @@ plt.title('Fluctuation of average monthly CEAP spending along the years (R$)')
 # ### Average monthly spending per congressperson along the years
 # This table shows the data above detailed per congressperson.
 
-# In[8]:
+# In[9]:
 
 # Groups by name summing up spendings
 a = r.groupby(['congressperson_name', 'year'])    .sum()    .drop('month', 1)
@@ -122,7 +133,7 @@ a.head()
 # ### Seasonality in reimbursements
 # Out of curiosity,in which period of the year more reimbursements were issued?
 
-# In[9]:
+# In[10]:
 
 r.groupby('month')    .sum()    .total_net_value    .sort_index()    .plot(kind='bar')
     
@@ -132,7 +143,7 @@ plt.title('Fluctuation of reimbursements issued by months (R$)')
 # ### Reimbursements by type of spending
 # For what are congressmen most using their quota?
 
-# In[10]:
+# In[11]:
 
 r.groupby('subquota_description')    .sum()    .total_net_value    .sort_values(ascending=True)    .plot(kind='barh')
     
@@ -143,13 +154,13 @@ plt.title('Total spent by type of service (R$)')
 
 # ##### How many congressmen in each party?
 
-# In[11]:
+# In[12]:
 
 parties = r.party.unique()
 parties
 
 
-# In[12]:
+# In[13]:
 
 # Computes unique names in each party and saves into a pd.Series
 d = dict()
@@ -162,7 +173,7 @@ s
 
 # #### How much did congressmen from each party spend in the year, in average? 
 
-# In[13]:
+# In[14]:
 
 t = r.groupby('party').sum()
 t = t.drop(['year', 'month'], 1)  # Removes useless columns
@@ -171,27 +182,72 @@ t['congressmen_per_party'] = s
 years = len(r.year.unique())
 
 
-# In[14]:
+# In[15]:
 
 t['monthly_value_per_congressperson'] = t['total_net_value'] / t['congressmen_per_party'] / (12*years)
 t.sort_values(by='monthly_value_per_congressperson', ascending=False).head()
 
 
-# In[15]:
+# In[16]:
 
 t.monthly_value_per_congressperson    .sort_values(ascending=False)    .plot(kind='bar')
 
 plt.title('Average monthly reimbursements per congressperson by party (R$)')
 
 
+# ### Which state has the most spending congressmen?
+
+# ##### How many congressmen in each state?
+
+# In[17]:
+
+states = r.state.unique()
+states
+
+
+# In[18]:
+
+# Computes unique names in each party and saves into a pd.Series
+d = dict()
+for s in states:
+    d[s] = len(r[r.state == s].congressperson_name.unique())
+
+s = pd.Series(d)
+s
+
+
+# #### How much did congressmen from each party spend in the year, in average? 
+
+# In[19]:
+
+t = r.groupby('state').sum()
+t = t.drop(['year', 'month'], 1)  # Removes useless columns
+
+t['congressmen_per_state'] = s
+years = len(r.year.unique())
+
+
+# In[20]:
+
+t['monthly_value_per_congressperson'] = t['total_net_value'] / t['congressmen_per_state'] / (12*years)
+t.sort_values(by='monthly_value_per_congressperson', ascending=False).head()
+
+
+# In[21]:
+
+t.monthly_value_per_congressperson    .sort_values(ascending=False)    .plot(kind='bar')
+
+plt.title('Average monthly reimbursements per congressperson by state (R$)')
+
+
 # ### Who were the top spenders of all time in absolute terms?
 
-# In[16]:
+# In[22]:
 
 r.groupby('congressperson_name')    .sum()    .total_net_value    .sort_values(ascending=False)    .head(10)
 
 
-# In[17]:
+# In[23]:
 
 r.groupby('congressperson_name')    .sum()    .total_net_value    .sort_values(ascending=False)    .head(30)    .plot(kind='bar')
 
@@ -201,7 +257,7 @@ plt.title('Total reimbursements issued per congressperson (all years)')
 # ### Who were the most hired suppliers by amount paid?
 # This analysis identifies suppliers by their unique CNPJ. It is worth noting that, commonly, some telecom carriers use different CNPJ for its subsidiaries in different states (e.g. TIM SP, TIM Sul, etc).
 
-# In[18]:
+# In[24]:
 
 sp = r.groupby(['cnpj_cpf', 'supplier', 'subquota_description'])        .sum()        .drop(['year', 'month'], 1)        .sort_values(by='total_net_value', ascending=False)
 
@@ -211,14 +267,14 @@ sp = sp.set_index('cnpj_cpf')
 sp.head()
 
 
-# In[19]:
+# In[25]:
 
 cnpj = r.groupby('cnpj_cpf')        .sum()        .drop(['year', 'month'], 1)        .sort_values(by='total_net_value', ascending=False)
 
 cnpj.head()
 
 
-# In[20]:
+# In[26]:
 
 # Adds supplier name besides total_net_value in cnpj df
 
@@ -226,7 +282,7 @@ cnpj['supplier'] = ''  # Creates empty column
 cnpj = cnpj.head(1000)  # Gets only first 1000 for this analysis
 
 
-# In[21]:
+# In[27]:
 
 # Looks up for supplier names in sp df and fills cnpj df (it takes a while to compute...)
 
@@ -239,7 +295,7 @@ for i in range(len(cnpj)):
 cnpj.head(10)
 
 
-# In[22]:
+# In[28]:
 
 # Fixes better indexing to plot in a copy
 sp2 = cnpj.set_index('supplier')
@@ -251,14 +307,14 @@ plt.title('Most hired suppliers (unique CNPJ) by total amount paid (R$)')
 
 # #### Which congressmen hired the top supplier and how much did they pay?
 
-# In[23]:
+# In[29]:
 
 r.groupby(['cnpj_cpf', 'congressperson_name'])    .sum()    .sort_values(by='total_net_value', ascending=False)    .loc['02558157000162']    .total_net_value    .head(20)
 
 
 # ### Which are the most expensive individual reimbursements?
 
-# In[24]:
+# In[30]:
 
 r = r.sort_values(by='total_net_value', ascending=False)
 r.head(20)

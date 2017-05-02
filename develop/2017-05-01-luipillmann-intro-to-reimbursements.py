@@ -12,6 +12,7 @@
 # - Seasonality in reimbursements
 # - Reimbursements by type of spending
 # - Which party has the most spending congressmen?
+# - Which state has the most spending congressmen?
 # - Who were the top spenders of all time in absolute terms?
 # - Who were the most hired suppliers by amount paid?
 # - Which are the most expensive individual reimbursements?

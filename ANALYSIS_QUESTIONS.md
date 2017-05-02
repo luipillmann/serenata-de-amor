@@ -19,6 +19,7 @@
 # Post topics
 
 - Compare how much is spent with publicity reimbursements vs. public education
+- Is there a relation between left-right orientation and spending patterns?
 
 # Bugs?
 

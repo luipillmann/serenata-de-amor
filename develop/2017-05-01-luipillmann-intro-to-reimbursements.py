@@ -219,6 +219,9 @@ s
 
 # #### How much did congressmen from each party spend in the year, in average? 
 
+# ##### (!) Important: CEAP maximum value differs among states
+# WIP: This analysis has yet to consider these differences. Please check: http://www2.camara.leg.br/comunicacao/assessoria-de-imprensa/cota-parlamentar
+
 # In[19]:
 
 t = r.groupby('state').sum()

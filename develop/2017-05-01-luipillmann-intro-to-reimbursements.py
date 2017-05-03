@@ -287,7 +287,7 @@ s
 # In[27]:
 
 s.plot(kind='bar', rot=0)
-plt.title('Average monthly CEAP usage per congressperson: SC vs. rest of the country (% of max. quota)')
+plt.title('Average monthly CEAP usage per congressperson: ' + state + ' vs. rest of the country (% of max. quota)')
 
 
 # ### Who were the top spenders of all time in absolute terms?

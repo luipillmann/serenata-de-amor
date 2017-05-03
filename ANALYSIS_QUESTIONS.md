@@ -12,7 +12,7 @@
     - Number of terms
     - Attendence %
     - Weight
-    - # of family members involved in politics
+    - Qty of family members involved in politics
 - Do congressmen who are longer in charge spend more?
 - Age difference between congressmen and their wives/husbands?
 
@@ -20,6 +20,7 @@
 
 - Compare how much is spent with publicity reimbursements vs. public education
 - Is there a relation between left-right orientation and spending patterns?
+- What is the relation between religion orientation and spending patterns?
 
 # Bugs?
 
